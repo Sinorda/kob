@@ -1,30 +1,42 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+  <div>
+    <div>bot name: {{ bot_name }}</div>
+    <div>bot rating: {{ bot_rating }}</div>
+  </div>
   <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script> //js
+import $ from 'jquery';
+import { ref } from 'vue';
 
-nav {
-  padding: 30px;
-}
+export default {
+  name: "App",
+  setup: () => {
+      let bot_name = ref("");
+      let bot_rating = ref(""); 
+      $.ajax({
+        url: "http://127.0.0.1:3000/pk/getbotinfo/",
+        type: "GET",
+        success: resp => {
+          //console.log(resp);
+          bot_name.value = resp.name;
+          bot_rating.value = resp.rating;
+        }
+      });
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+      return {
+        bot_name,
+        bot_rating,
+      }
+  }
 }
+</script>
 
-nav a.router-link-exact-active {
-  color: #42b983;
+<style> /*css */
+body {
+  /* @: current root directory */
+  background-image: url("@/assets/logo.png");
+  background-size: cover;
 }
 </style>
